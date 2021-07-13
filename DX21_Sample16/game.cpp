@@ -46,7 +46,7 @@ void InitGame(void)
 	InitBullet();
 	InitScore();
 
-	g_BGMNo = LoadSound("data/BGM/sample001.wav");
+	g_BGMNo = LoadSound("data/BGM/battle.wav");
 	//Playsound(BGMÇÃî‘çÜ,0Å`254);
 	PlaySound(g_BGMNo, 254);
 }

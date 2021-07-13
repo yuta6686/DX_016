@@ -90,7 +90,7 @@ void DrawScore(void)
 			float py = g_Pos.y;			// プレイヤーの表示位置Y
 			float pw = g_w;				// プレイヤーの表示幅
 			float ph = g_h;				// プレイヤーの表示高さ
-
+			
 			float tw = 1.0f / 10;		// テクスチャの幅
 			float th = 1.0f / 1;		// テクスチャの高さ
 			float tx = x * tw;			// テクスチャの左上X座標
