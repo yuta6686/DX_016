@@ -244,7 +244,10 @@ void PlaySound(int index, int loopCount)
 	buffer.AudioBytes = g_aSizeAudio[index];
 	buffer.pAudioData = g_apDataAudio[index];
 	buffer.Flags      = XAUDIO2_END_OF_STREAM;
-	buffer.LoopCount  = loopCount;
+
+	if (loopCount < 0) {
+		buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
+	}else buffer.LoopCount  = loopCount;
 
 	// ó‘ÔŽæ“¾
 	g_apSourceVoice[index]->GetState(&xa2state);

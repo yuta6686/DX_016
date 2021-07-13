@@ -12,6 +12,7 @@
 #include "sprite.h"
 #include "bullet.h"
 #include "score.h"
+#include "sound.h"
 
 
 //*****************************************************************************
@@ -28,7 +29,7 @@
 // グローバル変数
 //*****************************************************************************
 static PLAYER g_Player;
-
+static int	g_SENo;		// SE識別子
 
 //=============================================================================
 // 初期化処理
@@ -44,6 +45,10 @@ HRESULT InitPlayer(void)
 	g_Player.w = 50.0f;
 	g_Player.h = 50.0f;
 	g_Player.use = true;
+
+	g_SENo = LoadSound("data/SE/shot001.wav");
+	//Playsound(BGMの番号,0～254);
+	
 
 	return S_OK;
 }
@@ -79,6 +84,7 @@ void UpdatePlayer(void)
 		D3DXVECTOR2 pos = g_Player.pos;
 		SetBullet(pos);		// １発目
 		AddScore(123);
+		PlaySound(g_SENo, 0);
 	}
 }
 

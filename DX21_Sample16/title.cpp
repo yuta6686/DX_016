@@ -36,7 +36,8 @@ HRESULT InitTitle(void)
 	g_TextureNo = LoadTexture("data/TEXTURE/title.png");
 
 	g_BGMNo = LoadSound("data/BGM/sample000.wav");
-	PlaySound(g_BGMNo, -1);
+	//Playsound(BGMÇÃî‘çÜ,0Å`254);
+	PlaySound(g_BGMNo, 254);
 
 	return S_OK;
 }
