@@ -271,3 +271,67 @@ void DrawSpriteColorRotate(int texNo, float X, float Y, float Width, float Heigh
 	// ポリゴン描画
 	GetDeviceContext()->Draw(NUM_VERTEX, 0);
 }
+
+void DrawSpriteRotate_Beam(int texNo, float x, float y, float Width, float Height,
+	float U, float V, float UW, float VH, float angle,
+	D3DXCOLOR Color)
+{
+	D3D11_MAPPED_SUBRESOURCE msr;
+	GetDeviceContext()->Map(g_VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+	VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
+
+	float hw, hh;
+	hw = Width * 0.5f;
+	hh = Height * 0.5f;
+
+	float rad = RADIAN * angle;
+
+	float rot_x = +hw * 2.0f;
+	float rot_y = -hh;
+
+	vertex[1].Position = D3DXVECTOR3(rot_x * cosf(rad) - rot_y * sinf(rad) + x,
+		rot_x * sinf(rad) + rot_y * cosf(rad) + y, 0.0f);
+
+
+	rot_x = 0.0f;
+	rot_y = -hh;
+	vertex[0].Position = D3DXVECTOR3(rot_x * cosf(rad) - rot_y * sinf(rad) + x,
+		rot_x * sinf(rad) + rot_y * cosf(rad) + y, 0.0f);
+
+	rot_x = +hw * 2.0f;
+	rot_y = +hh;
+	vertex[3].Position = D3DXVECTOR3(rot_x * cosf(rad) - rot_y * sinf(rad) + x,
+		rot_x * sinf(rad) + rot_y * cosf(rad) + y, 0.0f);
+
+	rot_x = 0.0f;
+	rot_y = +hh;
+	vertex[2].Position = D3DXVECTOR3(rot_x * cosf(rad) - rot_y * sinf(rad) + x,
+		rot_x * sinf(rad) + rot_y * cosf(rad) + y, 0.0f);
+
+	vertex[0].Diffuse = Color;
+	vertex[1].Diffuse = Color;
+	vertex[2].Diffuse = Color;
+	vertex[3].Diffuse = Color;
+
+	vertex[1].TexCoord = D3DXVECTOR2(U, V);
+	vertex[0].TexCoord = D3DXVECTOR2(U + UW, V);
+	vertex[3].TexCoord = D3DXVECTOR2(U, V + VH);
+	vertex[2].TexCoord = D3DXVECTOR2(U + UW, V + VH);
+
+	GetDeviceContext()->Unmap(g_VertexBuffer, 0);
+
+	// 頂点バッファ設定
+	UINT stride = sizeof(VERTEX_3D);
+	UINT offset = 0;
+	GetDeviceContext()->IASetVertexBuffers(0, 1, &g_VertexBuffer, &stride, &offset);
+
+	// プリミティブトポロジ設定
+	GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	// テクスチャ設定
+	GetDeviceContext()->PSSetShaderResources(0, 1, GetTexture(texNo));
+
+	// ポリゴン描画
+	GetDeviceContext()->Draw(NUM_VERTEX, 0);
+}

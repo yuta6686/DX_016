@@ -23,15 +23,27 @@
 //*****************************************************************************
 // グローバル変数
 //*****************************************************************************
-static int	g_TextureNo = 0;	// テクスチャ情報
 
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitResult(void)
+HRESULT Result::Init(void)
 {
-	g_TextureNo = LoadTexture("data/TEXTURE/result.png");
+
+	switch (result_num)
+	{
+	case RESULT_WIN:
+		rwin.RWinInit();
+		rwin.SetStageNum(stage_num);
+		break;
+	case RESULT_LOSE:
+		rlose.RLoseInit();
+		rlose.SetStageNum(stage_num);
+		break;
+	default:
+		break;
+	}
 
 	return S_OK;
 }
@@ -39,7 +51,7 @@ HRESULT InitResult(void)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void UninitResult(void)
+void Result::Finalize(void)
 {
 
 }
@@ -47,19 +59,43 @@ void UninitResult(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void UpdateResult(void)
+void Result::Update(void)
 {
 	if (GetKeyboardTrigger(DIK_RETURN) && GetFadeState() == FADE_NONE)
 	{
 		SceneTransition(SCENE_TITLE);
+	}
+
+	switch (result_num)
+	{
+	case RESULT_WIN:
+		rwin.RWinUpdate();
+		break;
+	case RESULT_LOSE:
+		rlose.RLoseUpdate();
+		break;
+	default:
+		break;
 	}
 }
 
 //=============================================================================
 // 描画処理
 //=============================================================================
-void DrawResult(void)
+void Result::Draw(void)
 {
 	// １枚のポリゴンの頂点とテクスチャ座標を設定
-	DrawSpriteLeftTop(g_TextureNo, 0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f, 1.0f);
+
+	switch (result_num)
+	{
+	case RESULT_WIN:
+		rwin.RWinDraw();
+		break;
+	case RESULT_LOSE:
+		rlose.RLoseDraw();
+		break;
+	default:
+		break;
+	}
+
 }

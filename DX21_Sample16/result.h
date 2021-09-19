@@ -8,7 +8,8 @@
 
 #include "main.h"
 #include "renderer.h"
-
+#include "Result_Win.h"
+#include "Result_Lose.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -19,9 +20,18 @@
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitResult(void);
-void UninitResult(void);
-void UpdateResult(void);
-void DrawResult(void);
+class Result {
+	Result_Win rwin;
+	Result_Lose rlose;
+public:
+	HRESULT Init(void);
+	void Finalize(void);
+	void Update(void);
+	void Draw(void);
+
+	int result_num=1;
+	int stage_num;
+};
+
 
 

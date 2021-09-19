@@ -26,6 +26,7 @@
 
 #pragma warning(pop)
 
+#include "Parameter.h"
 
 //*****************************************************************************
 // ライブラリのリンク
@@ -43,9 +44,26 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define SCREEN_WIDTH	(960)				// ウインドウの幅
-#define SCREEN_HEIGHT	(540)				// ウインドウの高さ
+#define SCREEN_SIZE 3/4
 
+#define SCREEN_WIDTH	(1920)*SCREEN_SIZE				// ウインドウの幅
+#define SCREEN_HEIGHT	(1080)*SCREEN_SIZE	        	// ウインドウの高さ
+
+#define SCREEN_WIDTH_CENTER (SCREEN_WIDTH / 2)
+#define SCREEN_HEIGHT_CENTER (SCREEN_HEIGHT / 2)
+
+#define rep(i,n) for(int i=0;i<(int)(n);i++)
+
+#define PI 3.14159265358979323846264338327950L
+#define RADIAN PI/180.0
+
+typedef unsigned int UINT;
+
+enum {
+	RESULT_WIN,
+	RESULT_LOSE,
+	RESULT_MAX
+};
 
 //*****************************************************************************
 // プロトタイプ宣言

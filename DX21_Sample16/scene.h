@@ -11,8 +11,8 @@ enum SCENE
 	SCENE_MAX		//ç≈å„ÇæÇ∆ÇÌÇ©ÇÈìzÇÇ¢ÇÍÇÈ
 };
 
-void InitScene(SCENE index);
-void UninitScene(void);
+void InitializeScene(SCENE index);
+void TerminateScene(void);
 void UpdateScene(void);
 void DrawScene(void);
 

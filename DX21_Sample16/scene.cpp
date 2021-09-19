@@ -32,11 +32,14 @@
 static SCENE g_SceneIndex = SCENE_NONE;
 static SCENE g_SceneNextIndex = g_SceneIndex;
 
+Title g_title;
+Result g_result;
+Game g_game;
 
 /*------------------------------------------------------------------------------
    初期化関数
 ------------------------------------------------------------------------------*/
-void InitScene(SCENE index)
+void InitializeScene(SCENE index)
 {
 	g_SceneIndex = g_SceneNextIndex = index;
 
@@ -46,15 +49,15 @@ void InitScene(SCENE index)
 		break;
 
 	case SCENE_TITLE:
-		InitTitle();
+		g_title.Init();
 		break;
 
 	case SCENE_GAME:
-		InitGame();
+		g_game.Initialize();
 		break;
 
 	case SCENE_RESULT:
-		InitResult();
+		g_result.Init();
 		break;
 	}
 }
@@ -62,7 +65,7 @@ void InitScene(SCENE index)
 /*------------------------------------------------------------------------------
    終了処理をする関数
 ------------------------------------------------------------------------------*/
-void UninitScene(void)
+void TerminateScene(void)
 {
 	switch (g_SceneIndex)
 	{
@@ -70,15 +73,17 @@ void UninitScene(void)
 		break;
 
 	case SCENE_TITLE:
-		UninitTitle();
+		g_title.Uninit();
 		break;
 
 	case SCENE_GAME:
-		UninitGame();
+		g_game.Terminate();
 		break;
 
 	case SCENE_RESULT:
-		UninitResult();
+		g_result.result_num = g_game.result;
+		g_result.stage_num = g_game.stage_num;
+		g_result.Finalize();
 		break;
 	}
 }
@@ -94,15 +99,15 @@ void UpdateScene(void)
 		break;
 
 	case SCENE_TITLE:
-		UpdateTitle();
+		g_title.Update();
 		break;
 
 	case SCENE_GAME:
-		UpdateGame();
+		g_game.Update();
 		break;
 
 	case SCENE_RESULT:
-		UpdateResult();
+		g_result.Update();
 		break;
 	}
 
@@ -120,15 +125,15 @@ void DrawScene(void)
 		break;
 
 	case SCENE_TITLE:
-		DrawTitle();
+		g_title.Draw();
 		break;
 
 	case SCENE_GAME:
-		DrawGame();
+		g_game.Draw();
 		break;
 
 	case SCENE_RESULT:
-		DrawResult();
+		g_result.Draw();
 		break;
 	}
 
@@ -153,9 +158,9 @@ void CheckScene(void)
 	if( g_SceneIndex != g_SceneNextIndex )
 	{
 		//現在のシーンを終了させる
-		UninitScene();
+		TerminateScene();
 		
 		//遷移先シーンの初期化処理を行う
-		InitScene(g_SceneNextIndex);
+		InitializeScene(g_SceneNextIndex);
 	}
 }

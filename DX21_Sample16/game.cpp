@@ -17,6 +17,7 @@
 #include "collision.h"
 #include "sound.h"
 #include "score.h"
+#include "Stage.h"
 
 /*------------------------------------------------------------------------------
    定数定義
@@ -36,13 +37,30 @@
 ------------------------------------------------------------------------------*/
 static int	g_BGMNo = 0;		// BGM識別子
 
+Stage stage;
+
 /*------------------------------------------------------------------------------
    初期化関数
 ------------------------------------------------------------------------------*/
-void InitGame(void)
+void Game::Initialize(void)
 {
-	InitPlayer();
-	InitEnemy();
+	
+	if (stage.stage_num_flag) {
+		stage.stage_num_flag = false;
+
+		if (stage.stage_num_ >= stage_num_max - 1) {
+			stage.stage_num_ = 0;
+		}
+		else {
+			stage.stage_num_++;
+		}
+
+	}
+
+	stage_num = stage.stage_num_;
+	
+	stage.Init();
+
 	InitBullet();
 	InitScore();
 
@@ -54,12 +72,12 @@ void InitGame(void)
 /*------------------------------------------------------------------------------
    終了処理をする関数
 ------------------------------------------------------------------------------*/
-void UninitGame()
+void Game::Terminate()
 {
+	stage.Uninit();
+
 	UninitScore();
 	UninitBullet();
-	UninitEnemy();
-	UninitPlayer();
 
 	StopSoundAll();
 }
@@ -67,31 +85,36 @@ void UninitGame()
 /*------------------------------------------------------------------------------
    更新処理をする関数
 ------------------------------------------------------------------------------*/
-void UpdateGame(void)
+void Game::Update(void)
 {
-	UpdatePlayer();
-	UpdateEnemy();
+	stage.Update();
+
 	UpdateBullet();
 	UpdateScore();
 
-	UpdateCollision();
+	result = stage.result;
 
 	//スペースキーが押されていて、フェード処理中ではないとき
 	if (GetKeyboardTrigger(DIK_RETURN) && GetFadeState() == FADE_NONE) {
 
+		stage_num_flag = true;
+
 		//RESULTへ移行する
 		SceneTransition(SCENE_RESULT);
 	}
+
+	
 }
 
 /*------------------------------------------------------------------------------
    描画処理をする関数
 ------------------------------------------------------------------------------*/
-void DrawGame(void)
+void Game::Draw(void)
 {
+	stage.Draw();
+
 	DrawBullet();
-	DrawEnemy();
-	DrawPlayer();
+	
 	DrawScore();
 }
 
